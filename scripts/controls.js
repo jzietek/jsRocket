@@ -5,7 +5,7 @@ var keys = {
     rightKeyPressed : false
 };
 
-var rocketLocation = { x : 300, y: 300};
+var rocketLocation = { x : 300, y: 300, angle: 0};
 
 $(document).ready(function () {
     document.addEventListener('keydown', function(event) {
@@ -48,15 +48,19 @@ $(document).ready(function () {
             rocketLocation.y = rocketLocation.y - pixelShift;
         }
         if (keys.leftKeyPressed) {
-            rocketLocation.x = rocketLocation.x - pixelShift;
+            //rocketLocation.x = rocketLocation.x - pixelShift;
+            rocketLocation.angle = rocketLocation.angle - 1;
         }
         if (keys.rightKeyPressed) {
-            rocketLocation.x = rocketLocation.x + pixelShift;
+            //rocketLocation.x = rocketLocation.x + pixelShift;
+            rocketLocation.angle = rocketLocation.angle + 1;
         }
     }, 20);
 
     setInterval(function () {
-        document.getElementById("rocket").style.top = rocketLocation.y + "px";
-        document.getElementById("rocket").style.left = rocketLocation.x + "px";
-    }, 20);
+        var rocketStyle = document.getElementById("rocket").style;
+        rocketStyle.top = rocketLocation.y + "px";
+        rocketStyle.left = rocketLocation.x + "px";
+        $("#rocket").css("transform", "rotate(" + rocketLocation.angle + "deg)");
+    }, 40);
 });
