@@ -5,7 +5,12 @@ var keys = {
     rightKeyPressed : false
 };
 
-var rocketLocation = { x : 300, y: 300, angle: 0};
+var rocketState = { 
+    x : 300, 
+    y: 300, 
+    angle: 0,
+    thrust : 0
+};
 
 $(document).ready(function () {
     document.addEventListener('keydown', function(event) {
@@ -40,27 +45,42 @@ $(document).ready(function () {
 
 
     setInterval(function () {
-        var pixelShift = 2;
-        if (keys.downKeyPressed) {
-            rocketLocation.y = rocketLocation.y + pixelShift;
-        }
+        var pixelShift = 2;        
         if (keys.upKeyPressed) {
-            rocketLocation.y = rocketLocation.y - pixelShift;
+            rocketState.y = rocketState.y - pixelShift;
+            rocketState.thrust = 1;
+        }
+        if (keys.downKeyPressed) {
+            rocketState.y = rocketState.y + pixelShift;
+            rocketState.thrust = -1;            
+        }
+        if (!keys.downKeyPressed && !keys.upKeyPressed)
+        {            
+            rocketState.thrust = 0;
         }
         if (keys.leftKeyPressed) {
             //rocketLocation.x = rocketLocation.x - pixelShift;
-            rocketLocation.angle = rocketLocation.angle - 1;
+            rocketState.angle = rocketState.angle - 1;
         }
         if (keys.rightKeyPressed) {
             //rocketLocation.x = rocketLocation.x + pixelShift;
-            rocketLocation.angle = rocketLocation.angle + 1;
+            rocketState.angle = rocketState.angle + 1;
         }
     }, 20);
 
     setInterval(function () {
-        var rocketStyle = document.getElementById("rocket").style;
-        rocketStyle.top = rocketLocation.y + "px";
-        rocketStyle.left = rocketLocation.x + "px";
-        $("#rocket").css("transform", "rotate(" + rocketLocation.angle + "deg)");
+        var r = document.getElementById("rocket");
+        r.style.top = rocketState.y + "px";
+        r.style.left = rocketState.x + "px";
+        
+        if (rocketState.thrust > 0) {
+            r.src = "img/rocketWithFlame.png";
+        }
+        else
+        {
+            r.src = "img/rocket.png";
+        }
+        
+        $("#rocket").css("transform", "rotate(" + rocketState.angle + "deg)");
     }, 40);
 });
