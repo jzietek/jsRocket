@@ -5,7 +5,12 @@ var keys = {
     rightKeyPressed : false
 };
 
-var rocketLocation = { x : 300, y: 300};
+var rocketState = { 
+    x : 300, 
+    y: 300, 
+    angle: 0,
+    thrust : 0
+};
 
 $(document).ready(function () {
     document.addEventListener('keydown', function(event) {
@@ -38,25 +43,59 @@ $(document).ready(function () {
         }
     });
 
+    function calculateRocketPositionOffset(rState, pixelShift) {
+        var obj = { 
+            x : rState.thrust * pixelShift * Math.cos((rState.angle + 225) * (Math.PI/180)), 
+            y : rState.thrust * pixelShift * Math.sin((rState.angle + 225) * (Math.PI/180))
+        };
+        return obj;
+    }
 
+    //Calculate every 20 ms
     setInterval(function () {
-        var pixelShift = 2;
-        if (keys.downKeyPressed) {
-            rocketLocation.y = rocketLocation.y + pixelShift;
-        }
+        //TODO extract into a separate function
+        var pixelShift = 2;        
         if (keys.upKeyPressed) {
-            rocketLocation.y = rocketLocation.y - pixelShift;
+            rocketState.thrust = 1;
+        }
+        if (keys.downKeyPressed) {
+            rocketState.thrust = -1;            
+        }
+        if (!keys.downKeyPressed && !keys.upKeyPressed)
+        {            
+            rocketState.thrust = 0;
         }
         if (keys.leftKeyPressed) {
-            rocketLocation.x = rocketLocation.x - pixelShift;
+            rocketState.angle = rocketState.angle - 1;
         }
         if (keys.rightKeyPressed) {
-            rocketLocation.x = rocketLocation.x + pixelShift;
+            rocketState.angle = rocketState.angle + 1;
         }
+
+        //TODO Here comes the physics
+        var offset = calculateRocketPositionOffset(rocketState, pixelShift);
+        rocketState.y = rocketState.y + offset.y;
+        rocketState.x = rocketState.x + offset.x;
     }, 20);
 
+    //Animate at 25 FPS (every 40 ms)
     setInterval(function () {
-        document.getElementById("rocket").style.top = rocketLocation.y + "px";
-        document.getElementById("rocket").style.left = rocketLocation.x + "px";
-    }, 20);
+        var r = document.getElementById("rocket");
+        r.style.top = rocketState.y + "px";
+        r.style.left = rocketState.x + "px";
+        
+        if (rocketState.thrust > 0) {
+            if (r.src.endsWith("rocketWithFlame.png")) {
+                r.src = "img/rocket.png";    
+            } else {
+                r.src = "img/rocketWithFlame.png";
+            }            
+        }
+        else
+        {
+            r.src = "img/rocket.png";
+        }
+
+        $("#rocket").css("transform", "rotate(" + rocketState.angle + "deg)");
+    }, 40);
 });
