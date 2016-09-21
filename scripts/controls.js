@@ -43,7 +43,7 @@ $(document).ready(function () {
         }
     });
 
-
+    //Calculate every 20 ms
     setInterval(function () {
         var pixelShift = 2;        
         if (keys.upKeyPressed) {
@@ -59,28 +59,31 @@ $(document).ready(function () {
             rocketState.thrust = 0;
         }
         if (keys.leftKeyPressed) {
-            //rocketLocation.x = rocketLocation.x - pixelShift;
             rocketState.angle = rocketState.angle - 1;
         }
         if (keys.rightKeyPressed) {
-            //rocketLocation.x = rocketLocation.x + pixelShift;
             rocketState.angle = rocketState.angle + 1;
         }
     }, 20);
 
+    //Animate at 25 FPS (every 40 ms)
     setInterval(function () {
         var r = document.getElementById("rocket");
         r.style.top = rocketState.y + "px";
         r.style.left = rocketState.x + "px";
         
         if (rocketState.thrust > 0) {
-            r.src = "img/rocketWithFlame.png";
+            if (r.src.endsWith("rocketWithFlame.png")) {
+                r.src = "img/rocket.png";    
+            } else {
+                r.src = "img/rocketWithFlame.png";
+            }            
         }
         else
         {
             r.src = "img/rocket.png";
         }
-        
+
         $("#rocket").css("transform", "rotate(" + rocketState.angle + "deg)");
     }, 40);
 });
