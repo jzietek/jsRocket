@@ -1,0 +1,12 @@
+#space {
+    background-color: black;
+    width: auto;
+    height: auto;
+    max-height: 100%;
+    max-width: 100%;    
+}
+
+#rocket {
+    position: absolute;
+}
+
