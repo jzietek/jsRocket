@@ -43,15 +43,22 @@ $(document).ready(function () {
         }
     });
 
+    function calculateRocketPositionOffset(rState, pixelShift) {
+        var obj = { 
+            x : rState.thrust * pixelShift * Math.cos((rState.angle + 225) * (Math.PI/180)), 
+            y : rState.thrust * pixelShift * Math.sin((rState.angle + 225) * (Math.PI/180))
+        };
+        return obj;
+    }
+
     //Calculate every 20 ms
     setInterval(function () {
+        //TODO extract into a separate function
         var pixelShift = 2;        
         if (keys.upKeyPressed) {
-            rocketState.y = rocketState.y - pixelShift;
             rocketState.thrust = 1;
         }
         if (keys.downKeyPressed) {
-            rocketState.y = rocketState.y + pixelShift;
             rocketState.thrust = -1;            
         }
         if (!keys.downKeyPressed && !keys.upKeyPressed)
@@ -64,6 +71,11 @@ $(document).ready(function () {
         if (keys.rightKeyPressed) {
             rocketState.angle = rocketState.angle + 1;
         }
+
+        //TODO Here comes the physics
+        var offset = calculateRocketPositionOffset(rocketState, pixelShift);
+        rocketState.y = rocketState.y + offset.y;
+        rocketState.x = rocketState.x + offset.x;
     }, 20);
 
     //Animate at 25 FPS (every 40 ms)
