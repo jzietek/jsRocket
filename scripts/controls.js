@@ -177,6 +177,7 @@ $(document).ready(function () {
     }
 
     function calculateGravity(pState, rState) {
+        var maxV = 5;        
         var rtpx = pState.getCx() - rState.getCx();
         var rtpy = pState.getCy() - rState.getCy();
         var distance = Math.sqrt( (rtpx * rtpx) + (rtpy * rtpy) );
@@ -185,8 +186,13 @@ $(document).ready(function () {
             var invDistance2 = Math.min(5 / (distance), 2);
             console.log(invDistance2);
 
-            rState.vx = rState.vx + ((rtpx / distance) * invDistance2);
-            rState.vy = rState.vy + ((rtpy / distance) * invDistance2);
+            var tempX = rState.vx + ((rtpx / distance) * invDistance2);
+            var tempY = rState.vy + ((rtpy / distance) * invDistance2);
+            tempX = Math.max(-1 * maxV, Math.min(maxV, tempX));
+            tempY = Math.max(-1 * maxV, Math.min(maxV, tempY));
+
+            rState.vx = tempX;
+            rState.vy = tempY;
         }        
     }
 
