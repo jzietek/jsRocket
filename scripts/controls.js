@@ -181,10 +181,12 @@ $(document).ready(function () {
         var rtpy = pState.getCy() - rState.getCy();
         var distance = Math.sqrt( (rtpx * rtpx) + (rtpy * rtpy) );
 
-        if (distance !== 0.0)
-        {
-            rState.vx = rState.vx + (0.05 * (rtpx / distance));
-            rState.vy = rState.vy + (0.05 * (rtpy / distance));
+        if (distance !== 0.0) {
+            var invDistance2 = Math.min(5 / (distance), 2);
+            console.log(invDistance2);
+
+            rState.vx = rState.vx + ((rtpx / distance) * invDistance2);
+            rState.vy = rState.vy + ((rtpy / distance) * invDistance2);
         }        
     }
 
