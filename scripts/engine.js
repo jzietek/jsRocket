@@ -26,12 +26,25 @@ var Planet = function () {
 };
 Planet.prototype = new Object2d();
 
+var Space = function (width, height, starsCount) {
+    this.width = width;
+    this.height = height;
+    this.starsStates = [];
+    for (var i = 0; i < starsCount; i++) {
+        this.starsStates.push({
+            x: Math.random() * this.width,
+            y: Math.random() * this.height,
+            rotation: Math.random() * 90,
+            scale: Math.random() * 0.5
+        });
+    }
+};
+Space.prototype = new Object2d();
 
+var spaceState = new Space(window.innerWidth, window.innerHeight, 256);
 var rocketState = new Rocket();
 var planetState = new Planet();
-var spaceState = new Object2d();
 
-var starsStates = [];
 
 
 function calculateRocketPositionOffset(rState, pixelShiftMultiplier) {
@@ -77,24 +90,7 @@ function calculateRocketVelocities(rState) {
     rState.vy = rState.vy + (0.01 * rState.thrust * Math.sin((rState.angle + 225) * (Math.PI / 180)));
 };
 
-function generateStarStates(starsCount) {
-    var result = [];
-    for (var i = 0; i < starsCount; i++) {
-        result.push({
-            x: Math.random() * spaceState.width,
-            y: Math.random() * spaceState.height,
-            rotation: Math.random() * 90,
-            scale: Math.random() * 0.5
-        });
-    }
-    return result;
-};
-
 function initAll() {
-    //Space part
-    spaceState.width = window.innerWidth;
-    spaceState.height = window.innerHeight;
-    
     //Rocket part
     var r = document.getElementById("rocket");
     rocketState.width = r.width;
@@ -104,24 +100,11 @@ function initAll() {
     var p = document.getElementById("planet");
     planetState.width = p.width;
     planetState.height = p.height;
-    planetState.x = (spaceState.width / 2) - (planetState.width / 2);
-    planetState.y = (spaceState.height / 2) - (planetState.height / 2);
+    planetState.x = spaceState.getCx() - (planetState.width / 2);
+    planetState.y = spaceState.getCy() - (planetState.height / 2);
 
     p.style.top = planetState.y + "px";
-    p.style.left = planetState.x + "px";
-
-    $("#pCenter").css("top", planetState.getCy());
-    $("#pCenter").css("left", planetState.getCx());
-
-    $("#rCenter").css("top", rocketState.getCy());
-    $("#rCenter").css("left", rocketState.getCx());
-
-    //Stars part
-    starsStates = generateStarStates(256);
-    for (var i = 0; i < starsStates.length; i++) {
-        var sState = starsStates[i];
-        $("#space").append("<img src='img/star.png' style='z-order: 0; position: absolute; top: " + sState.y + "px; left:" + sState.x + "px; transform: rotate(" + sState.rotation + "deg); transform: scale(" + sState.scale + "," + sState.scale + ")'></img>");
-    }
+    p.style.left = planetState.x + "px";    
 };
 
 function calculateGravity(pState, rState) {

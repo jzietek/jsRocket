@@ -24,8 +24,14 @@ var drawingHelper = {
     },
 
 
-    drawSpace : function (spaceState) {
+    drawSpace: function (spaceState) {
         $("#space").css("height", spaceState.height);
         $("#space").css("width", spaceState.width);
+
+        for (var i = 0; i < spaceState.starsStates.length; i++) {
+            var sState = spaceState.starsStates[i];            
+            var newImgTag = "<img src='img/star.png' class='star' style='top: " + sState.y + "px; left:" + sState.x + "px; transform: rotate(" + sState.rotation + "deg); transform: scale(" + sState.scale + "," + sState.scale + ")'></img>"
+            $("#space").append(newImgTag);
+        }
     }
 };
