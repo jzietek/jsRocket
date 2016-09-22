@@ -8,13 +8,16 @@
 
 #rocket {
     position: absolute;
+    z-index: 10;
 }
 
 
 #planet {
     position: absolute;
+    z-index: 2;
 }
 
 body {
     overflow: hidden;    
+    margin : 0px;
 }

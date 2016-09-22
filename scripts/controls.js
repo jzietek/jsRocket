@@ -13,7 +13,13 @@ var rocketState = {
     angle: 0,
     thrust : 0,
     width : 0,
-    height : 0
+    height : 0,
+    getCx : function() {
+        return this.x + (this.width/2);    
+    },
+    getCy : function() {
+        return this.y + (this.height/2);    
+    }
 };
 
 var planetState = {
@@ -21,13 +27,26 @@ var planetState = {
     y : 0,
     g : 1,
     width : 0,
-    height : 0
+    height : 0,
+    getCx : function() { //TODO move that to some prototype
+        return this.x + (this.width/2);    
+    },
+    getCy : function() {
+        return this.y + (this.height/2);    
+    }
 };
 
 var spaceState = {
     width : 0,
     height : 0
 };
+
+var starsStates = [{ 
+    x : 50, 
+    y : 50,
+    rotation : 10,
+    scale: 0.5 
+}];
 
 $(document).ready(function () {    
     initAll();
@@ -108,12 +127,30 @@ $(document).ready(function () {
         rState.vy = rState.vy + (0.01 * rState.thrust * Math.sin((rState.angle + 225) * (Math.PI/180)));      
     }
 
+    function generateStarStates(starsCount) {
+        var result = [];
+        for (var i = 0; i < starsCount; i++) {
+            result.push({ 
+                x: Math.random() * spaceState.width,
+                y: Math.random() * spaceState.height,
+                rotation: Math.random() * 90,
+                scale: Math.random() * 0.5 
+            });
+        }
+        return result;
+    }
+
     function initAll() {
         //Space part
-        spaceState.width = window.innerWidth - 30;
-        spaceState.height = window.innerHeight - 30;               
+        spaceState.width = window.innerWidth;
+        spaceState.height = window.innerHeight;               
         $("#space").css("height", spaceState.height);
         $("#space").css("width", spaceState.width);
+
+        //Rocket part
+        var r = document.getElementById("rocket");
+        rocketState.width = r.width;
+        rocketState.height = r.height;
 
         //Planet part        
         var p = document.getElementById("planet");
@@ -124,16 +161,43 @@ $(document).ready(function () {
 
         p.style.top = planetState.y + "px";
         p.style.left = planetState.x + "px";
+
+        $("#pCenter").css("top", planetState.getCy());
+        $("#pCenter").css("left", planetState.getCx());
+
+        $("#rCenter").css("top", rocketState.getCy());
+        $("#rCenter").css("left", rocketState.getCx());
+
+        //Stars part
+        starsStates = generateStarStates(256);        
+        for (var i = 0; i < starsStates.length; i++) {
+            var sState = starsStates[i];            
+            $("#space").append("<img src='img/star.png' style='z-order: 0; position: absolute; top: " + sState.y + "px; left:" + sState.x + "px; transform: rotate(" + sState.rotation + "deg); transform: scale(" + sState.scale + "," + sState.scale + ")'></img>");
+        }
     }
 
-    //Calculate every 20 ms
+    function calculateGravity(pState, rState) {
+        var rtpx = pState.getCx() - rState.getCx();
+        var rtpy = pState.getCy() - rState.getCy();
+        var distance = Math.sqrt( (rtpx * rtpx) + (rtpy * rtpy) );
+
+        if (distance !== 0.0)
+        {
+            rState.vx = rState.vx + (0.05 * (rtpx / distance));
+            rState.vy = rState.vy + (0.05 * (rtpy / distance));
+        }        
+    }
+
+    //Calculate every some ms
     setInterval(function () {          
         setThrustAndAngle(rocketState);
                
         calculateRocketVelocities(rocketState);
+        
+        calculateGravity(planetState, rocketState);
  
-        calculateRocketPositionOffset(rocketState, 2);        
-    }, 20);
+        calculateRocketPositionOffset(rocketState, 1);        
+    }, 25);
 
     //Animate at 25 FPS (every 40 ms)
     setInterval(function () {       
