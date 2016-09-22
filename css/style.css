@@ -14,3 +14,7 @@
 #planet {
     position: absolute;
 }
+
+body {
+    overflow: hidden;    
+}
