@@ -7,8 +7,8 @@
     <script src="scripts/controls.js"></script>
     <script>
         $(document).ready(function () {
-            $("#space").css("height", window.innerHeight);
-            $("#space").css("width", window.innerWidth);            
+            $("#space").css("height", window.innerHeight - 10);
+            $("#space").css("width", window.innerWidth - 10);            
         });
     </script>
 </head>
@@ -16,6 +16,7 @@
 <body>
     <div id="space" >
         <img id="rocket" src="img/rocket.png" ></img>
+        <img id="planet" src="img/planet.png" ></img>
     </div>
 </body>
 

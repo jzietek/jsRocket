@@ -8,9 +8,18 @@ var keys = {
 var rocketState = { 
     x : 300, 
     y: 300, 
+    ax : 0,
+    ay : 0,
+    vx : 0,
+    vy : 0,
     angle: 0,
     thrust : 0
 };
+
+var planetState = {
+    x : 500,
+    y : 500
+}
 
 $(document).ready(function () {
     document.addEventListener('keydown', function(event) {
@@ -43,43 +52,53 @@ $(document).ready(function () {
         }
     });
 
-    function calculateRocketPositionOffset(rState, pixelShift) {
-        var obj = { 
-            x : rState.thrust * pixelShift * Math.cos((rState.angle + 225) * (Math.PI/180)), 
-            y : rState.thrust * pixelShift * Math.sin((rState.angle + 225) * (Math.PI/180))
-        };
-        return obj;
+    function calculateRocketPositionOffset(rState, pixelShiftMultiplier) {
+        rState.y = rState.y + rState.vy * pixelShiftMultiplier;
+        rState.x = rState.x + rState.vx * pixelShiftMultiplier;
     }
 
-    //Calculate every 20 ms
-    setInterval(function () {
-        //TODO extract into a separate function
-        var pixelShift = 2;        
+    function setThrustAndAngle(rState)
+    {
         if (keys.upKeyPressed) {
-            rocketState.thrust = 1;
+            rState.thrust = 2;
         }
         if (keys.downKeyPressed) {
-            rocketState.thrust = -1;            
+            rState.thrust = -1;            
         }
         if (!keys.downKeyPressed && !keys.upKeyPressed)
         {            
-            rocketState.thrust = 0;
+            rState.thrust = 0;
         }
         if (keys.leftKeyPressed) {
-            rocketState.angle = rocketState.angle - 1;
+            rState.angle = rState.angle - 2;
         }
         if (keys.rightKeyPressed) {
-            rocketState.angle = rocketState.angle + 1;
+            rState.angle = rState.angle + 2;
         }
+    }
+    
+    function calculateRocketVelocities(rState) {
+        rState.vx = rState.vx + (0.01 * rState.thrust * Math.cos((rState.angle + 225) * (Math.PI/180)));
+        rState.vy = rState.vy + (0.01 * rState.thrust * Math.sin((rState.angle + 225) * (Math.PI/180)));      
+    }
 
-        //TODO Here comes the physics
-        var offset = calculateRocketPositionOffset(rocketState, pixelShift);
-        rocketState.y = rocketState.y + offset.y;
-        rocketState.x = rocketState.x + offset.x;
+    //Calculate every 20 ms
+    setInterval(function () {          
+        setThrustAndAngle(rocketState);
+       
+        calculateRocketVelocities(rocketState);
+ 
+        calculateRocketPositionOffset(rocketState, 2);        
     }, 20);
 
     //Animate at 25 FPS (every 40 ms)
     setInterval(function () {
+        //Planet part
+        var p = document.getElementById("planet");
+        p.style.top = planetState.y + "px";
+        p.style.left = planetState.x + "px";
+
+        //Rocket part
         var r = document.getElementById("rocket");
         r.style.top = rocketState.y + "px";
         r.style.left = rocketState.x + "px";
