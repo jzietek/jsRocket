@@ -4,34 +4,39 @@ function getLvl1() {
         {
              "id": "rocket1",
              "cssClass" : "astroObject",
-             "image": "img/rocket.png",
-             "top": 300,
-             "left": 300,
-             "rotation": 0,
-             "vx": 3,
-             "vy": 0
+             "images": { "default" : "img/rocket.png", "withFlame" : "img/rocketWithFlame.png" },
+             "imageSelector" : "default",
+             "top": 30,
+             "left": 30,
+             "rotation": 180,
+             "scale" : 1.0,
+             "vx": 0,
+             "vy": 3,
+             "thrust" : 0
         }],
     "astroObjects": [
         {
             "id" : "moon1",
             "cssClass" : "astroObject",
-            "image" : "img/moon.png",
+            "images": { "default" : "img/moon.png" },
+            "imageSelector" : "default",
             "top" : 20,
             "left" : 80,
             "rotation" : 0,
-            "vx" : 0,
-            "vy" : 1,
+            "vx" : 0.2,
+            "vy" : 0.2,
             "scale" : 1.0
         },
         {
             "id" : "moon2",
             "cssClass" : "astroObject",
-            "image" : "img/moon.png",
+            "images": { "default" : "img/moon.png" },
+            "imageSelector" : "default",
             "top" : 120,
             "left" : 60,
             "rotation" : 120,
-            "vx" : 0,
-            "vy" : 1,
+            "vx" : -0.1,
+            "vy" : 0.1,
             "scale" : 0.5
         }],
     "backgroundStars": []

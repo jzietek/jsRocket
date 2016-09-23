@@ -1,3 +1,5 @@
+"use strict"
+
 var Object2d = function () {
     this.x = 0;
     this.y = 0;
@@ -28,7 +30,7 @@ Planet.prototype = new Object2d();
 var Space = function (width, height, starsCount) {
     this.width = width;
     this.height = height;
-    this.starsStates = [];    
+    this.starsStates = [];
 };
 Space.prototype = new Object2d();
 
@@ -36,41 +38,66 @@ var spaceState = new Space(window.innerWidth, window.innerHeight, 256);
 var rocketState = new Rocket();
 var planetState = new Planet();
 
-function calculateRocketPositionOffset(rState, pixelShiftMultiplier) {
-    rState.y = rState.y + rState.vy * pixelShiftMultiplier;
-    rState.x = rState.x + rState.vx * pixelShiftMultiplier;
+function calculatePositions(gameState, objectsArray) {
+    var pixelShiftMultiplier = 1.0;
+    for (var i = 0; i < objectsArray.length; i++) {
+        var s = objectsArray[i];
+        s.top = s.top + s.vy * pixelShiftMultiplier;
+        s.left = s.left + s.vx * pixelShiftMultiplier;
+
+        //Edge check
+        if (s.top < -1 * s.height) {
+            s.top = gameState.height;
+        }
+        else if (s.top > gameState.height) {
+            s.top = -1 * s.height;
+        }
+
+        if (s.left < -1 * s.width) {
+            s.left = gameState.width;
+        }
+        else if (s.left > gameState.width) {
+            s.left = -1 * s.width;
+        }
+    }
+}
+
+function calculateRocketPositionOffset(s, pixelShiftMultiplier) {
+    s.y = s.y + s.vy * pixelShiftMultiplier;
+    s.x = s.x + s.vx * pixelShiftMultiplier;
 
     //Edge check
-    if (rState.y < -1 * rState.height) {
-        rState.y = spaceState.height;
+    if (s.y < -1 * s.height) {
+        s.y = spaceState.height;
     }
-    else if (rState.y > spaceState.height) {
-        rState.y = -1 * rState.height;
+    else if (s.y > spaceState.height) {
+        s.y = -1 * s.height;
     }
 
-    if (rState.x < -1 * rState.width) {
-        rState.x = spaceState.width;
+    if (s.x < -1 * s.width) {
+        s.x = spaceState.width;
     }
-    else if (rState.x > spaceState.width) {
-        rState.x = -1 * rState.width;
+    else if (s.x > spaceState.width) {
+        s.x = -1 * s.width;
     }
 };
 
-function setThrustAndAngle(rState) {
+
+function setThrustAndAngle(vessel) {
     if (inputManager.isUpKeyPressed()) {
-        rState.thrust = 2;
+        vessel.thrust = 2;
     }
     if (inputManager.isDownKeyPressed()) {
-        rState.thrust = -1;
+        vessel.thrust = -1;
     }
     if (!inputManager.isDownKeyPressed() && !inputManager.isUpKeyPressed()) {
-        rState.thrust = 0;
+        vessel.thrust = 0;
     }
     if (inputManager.isLeftKeyPressed()) {
-        rState.rotation = rState.rotation - 2;
+        vessel.rotation = vessel.rotation - 2;
     }
     if (inputManager.isRightKeyPressed()) {
-        rState.rotation = rState.rotation + 2;
+        vessel.rotation = vessel.rotation + 2;
     }
 };
 
@@ -96,7 +123,7 @@ function initAll() {
     p.style.left = planetState.x + "px";
 };
 
-"use strict"
+
 
 function calculateGravity(pState, rState) {
     var maxV = 5;
@@ -124,28 +151,57 @@ function loadGameState() {
 
     stateParsed.width = window.innerWidth;
     stateParsed.height = window.innerHeight;
-    
+
     if (stateParsed.backgroundStars === undefined || stateParsed.backgroundStars.length === 0) {
-        temp = [];
+        var temp = [];
         for (var i = 0; i < 256; i++) {
-            temp.push({ 
-                left: Math.random() * stateParsed.width, 
-                top: Math.random() * stateParsed.height, 
-                rotation: Math.random() * 90, 
-                scale: Math.random() * 0.5, 
-                image: "img/star.png",
-                cssClass: "star" 
+            temp.push({
+                id: "star" + i,
+                left: Math.random() * stateParsed.width,
+                top: Math.random() * stateParsed.height,
+                rotation: Math.random() * 90,
+                scale: Math.random() * 0.5,
+                images: { "default": "img/star.png" },
+                imageSelector: "default",
+                cssClass: "star"
             });
         }
         stateParsed.backgroundStars = temp;
     }
+
+    for (var i = 0; i < stateParsed.spaceShips.length; i++) {
+        var s = stateParsed.spaceShips[i];
+        s.action = function () { //TODO move to somehere else
+            //Toggle flame
+            if (s.thrust > 0) {
+                if (s.imageSelector === "withFlame") {
+                    s.imageSelector = "default";
+                } else {
+                    s.imageSelector = "withFlame";
+                }
+            } else {
+                s.imageSelector = "default";
+            }
+        };
+    }
     return stateParsed;
 };
+
+function processObjectsActions(objectsArray) {
+    for (var i = 0; i < objectsArray.length; i++) {
+        var obj = objectsArray[i];
+        if (obj.action) {            
+            obj.action();
+        }
+    }
+}
+
+
 
 //Load the level data 
 var gameState = loadGameState();
 
-$(document).ready(function () {            
+$(document).ready(function () {
     //Set controls
     document.addEventListener('keydown', function (event) {
         inputManager.keyDownFunc(event);
@@ -157,6 +213,7 @@ $(document).ready(function () {
     drawingHelper.drawSpace(spaceState);
     drawingHelper.add2dObjects(gameState.backgroundStars);
     drawingHelper.add2dObjects(gameState.astroObjects);
+    drawingHelper.add2dObjects(gameState.spaceShips);
 
     //Start the logic loop
     setInterval(function () {
@@ -164,10 +221,19 @@ $(document).ready(function () {
         calculateRocketVelocities(rocketState);
         calculateGravity(planetState, rocketState);
         calculateRocketPositionOffset(rocketState, 1);
+
+        setThrustAndAngle(gameState.spaceShips[0]);
+        calculateRocketVelocities(gameState.spaceShips[0]);
+        calculatePositions(gameState, gameState.astroObjects);
+        calculatePositions(gameState, gameState.spaceShips);
+
+        processObjectsActions(gameState.spaceShips);        
     }, 25);
 
     //Start the animation loop
     setInterval(function () {
         drawingHelper.drawRocket(rocketState);
+        drawingHelper.animateObjects(gameState.spaceShips);
+        drawingHelper.animateObjects(gameState.astroObjects);
     }, 40);
 });
