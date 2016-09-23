@@ -107,6 +107,8 @@ function initAll() {
     p.style.left = planetState.x + "px";    
 };
 
+ "use strict"
+
 function calculateGravity(pState, rState) {
     var maxV = 5;
     var rtpx = pState.getCx() - rState.getCx();
@@ -115,7 +117,7 @@ function calculateGravity(pState, rState) {
 
     if (distance !== 0.0) {
         var invDistance2 = Math.min(5 / (distance), 2);
-        console.log(invDistance2);
+        //console.log(invDistance2);
 
         var tempX = rState.vx + ((rtpx / distance) * invDistance2);
         var tempY = rState.vy + ((rtpy / distance) * invDistance2);
@@ -129,8 +131,8 @@ function calculateGravity(pState, rState) {
 
 $(document).ready(function () {
     //Set controls
-    document.addEventListener('keydown', inputManager.keyDownFunc);
-    document.addEventListener('keyup', inputManager.keyUpFunc);
+    document.addEventListener('keydown', function (event) { inputManager.keyDownFunc(event); });
+    document.addEventListener('keyup', function (event) { inputManager.keyUpFunc(event); });
 
     //Initialize game area
     initAll();

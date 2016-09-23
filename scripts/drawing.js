@@ -1,3 +1,5 @@
+ "use strict"
+
 var drawingHelper = {
     drawRocket: function (rocketState) {
         var imgRocketWithFlame = "img/rocketWithFlame.png";

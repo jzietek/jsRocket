@@ -1,36 +1,54 @@
+ "use strict"
+
 var inputManager = {
-    upKeyPressed: false,
-    downKeyPressed: false,
-    leftKeyPressed: false,
-    rightKeyPressed: false,
+    _upKeyPressed: false,
+    _downKeyPressed: false,
+    _leftKeyPressed: false,
+    _rightKeyPressed: false,
 
     keyDownFunc : function(event) {
         if(event.keyCode == 40) {
-            inputManager.downKeyPressed = true;
+            this._downKeyPressed = true;
         }
-        else if(event.keyCode == 38) {
-            inputManager.upKeyPressed = true;
+        else if(event.keyCode == 38) {            
+            this._upKeyPressed = true;
         }
         else if(event.keyCode == 37) {
-            inputManager.leftKeyPressed = true;
+            this._leftKeyPressed = true;
         }
         else if(event.keyCode == 39) {
-            inputManager.rightKeyPressed = true;
+            this._rightKeyPressed = true;
         }
     },
 
     keyUpFunc : function (event) {
         if (event.keyCode == 40) {
-            inputManager.downKeyPressed = false;
+            this._downKeyPressed = false;
         }
         else if (event.keyCode == 38) {
-            inputManager.upKeyPressed = false;
+            this._upKeyPressed = false;
         }
         else if (event.keyCode == 37) {
-            inputManager.leftKeyPressed = false;
+            this._leftKeyPressed = false;
         }
         else if (event.keyCode == 39) {
-            inputManager.rightKeyPressed = false;
+            this._rightKeyPressed = false;
         }
-    }
+    },
+
+    get upKeyPressed () {
+        return this._upKeyPressed;
+    },
+
+    get downKeyPressed () {
+        return this._downKeyPressed;
+    },
+
+    get leftKeyPressed () {
+        return this._leftKeyPressed;
+    },
+
+    get rightKeyPressed () {
+        return this._rightKeyPressed;
+    },
 };
