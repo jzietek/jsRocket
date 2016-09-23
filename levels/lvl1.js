@@ -16,6 +16,18 @@ function getLvl1() {
         }],
     "astroObjects": [
         {
+            "id" : "earth",
+            "cssClass" : "astroObject",
+            "images": { "default" : "img/planet.png" },
+            "imageSelector" : "default",
+            "top" : 300,
+            "left" : 100,
+            "rotation" : 0,
+            "vx" : 0,
+            "vy" : 0,
+            "scale" : 1.0
+        },
+        {
             "id" : "moon1",
             "cssClass" : "astroObject",
             "images": { "default" : "img/moon.png" },
