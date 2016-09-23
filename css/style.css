@@ -6,12 +6,22 @@
     max-width: 100%;    
 }
 
-#rocket {
+#rocket { /*TODO remove that*/
     position: absolute;
     z-index: 10;
 }
 
-#planet {
+.spaceShip {
+    position: absolute;
+    z-index: 10;
+}
+
+#planet { /*TODO remove that*/
+    position: absolute;
+    z-index: 2;
+}
+
+.astroObject {
     position: absolute;
     z-index: 2;
 }
