@@ -45,8 +45,6 @@ var spaceState = new Space(window.innerWidth, window.innerHeight, 256);
 var rocketState = new Rocket();
 var planetState = new Planet();
 
-
-
 function calculateRocketPositionOffset(rState, pixelShiftMultiplier) {
     rState.y = rState.y + rState.vy * pixelShiftMultiplier;
     rState.x = rState.x + rState.vx * pixelShiftMultiplier;
@@ -68,19 +66,19 @@ function calculateRocketPositionOffset(rState, pixelShiftMultiplier) {
 };
 
 function setThrustAndAngle(rState) {
-    if (inputManager.upKeyPressed) {
+    if (inputManager.isUpKeyPressed()) {
         rState.thrust = 2;
     }
-    if (inputManager.downKeyPressed) {
+    if (inputManager.isDownKeyPressed()) {
         rState.thrust = -1;
     }
-    if (!inputManager.downKeyPressed && !inputManager.upKeyPressed) {
+    if (!inputManager.isDownKeyPressed() && !inputManager.isUpKeyPressed()) {
         rState.thrust = 0;
     }
-    if (inputManager.leftKeyPressed) {
+    if (inputManager.isLeftKeyPressed()) {
         rState.angle = rState.angle - 2;
     }
-    if (inputManager.rightKeyPressed) {
+    if (inputManager.isRightKeyPressed()) {
         rState.angle = rState.angle + 2;
     }
 };
@@ -131,7 +129,9 @@ function calculateGravity(pState, rState) {
 
 $(document).ready(function () {
     //Set controls
-    document.addEventListener('keydown', function (event) { inputManager.keyDownFunc(event); });
+    document.addEventListener('keydown', function (event) { 
+        inputManager.keyDownFunc(event); 
+    });
     document.addEventListener('keyup', function (event) { inputManager.keyUpFunc(event); });
 
     //Initialize game area

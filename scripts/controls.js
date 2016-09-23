@@ -1,54 +1,56 @@
- "use strict"
+"use strict"
 
-var inputManager = {
-    _upKeyPressed: false,
-    _downKeyPressed: false,
-    _leftKeyPressed: false,
-    _rightKeyPressed: false,
+var inputManager = (function () {
+    var _upKeyPressed = false;
+    var _downKeyPressed = false;
+    var _leftKeyPressed = false;
+    var _rightKeyPressed = false;
 
-    keyDownFunc : function(event) {
-        if(event.keyCode == 40) {
-            this._downKeyPressed = true;
-        }
-        else if(event.keyCode == 38) {            
-            this._upKeyPressed = true;
-        }
-        else if(event.keyCode == 37) {
-            this._leftKeyPressed = true;
-        }
-        else if(event.keyCode == 39) {
-            this._rightKeyPressed = true;
-        }
-    },
+    return {
+        keyDownFunc: function (event) {
+            if (event.keyCode == 40) {
+                _downKeyPressed = true;
+            }
+            else if (event.keyCode == 38) {
+                _upKeyPressed = true;
+            }
+            else if (event.keyCode == 37) {
+                _leftKeyPressed = true;
+            }
+            else if (event.keyCode == 39) {
+                _rightKeyPressed = true;
+            }
+        },
 
-    keyUpFunc : function (event) {
-        if (event.keyCode == 40) {
-            this._downKeyPressed = false;
-        }
-        else if (event.keyCode == 38) {
-            this._upKeyPressed = false;
-        }
-        else if (event.keyCode == 37) {
-            this._leftKeyPressed = false;
-        }
-        else if (event.keyCode == 39) {
-            this._rightKeyPressed = false;
-        }
-    },
+        keyUpFunc: function (event) {
+            if (event.keyCode == 40) {
+                _downKeyPressed = false;
+            }
+            else if (event.keyCode == 38) {
+                _upKeyPressed = false;
+            }
+            else if (event.keyCode == 37) {
+                _leftKeyPressed = false;
+            }
+            else if (event.keyCode == 39) {
+                _rightKeyPressed = false;
+            }
+        },
 
-    get upKeyPressed () {
-        return this._upKeyPressed;
-    },
+        isUpKeyPressed: function () {
+            return _upKeyPressed;
+        },
 
-    get downKeyPressed () {
-        return this._downKeyPressed;
-    },
+        isDownKeyPressed: function () {
+            return _downKeyPressed;
+        },
 
-    get leftKeyPressed () {
-        return this._leftKeyPressed;
-    },
+        isLeftKeyPressed: function () {
+            return _leftKeyPressed;
+        },
 
-    get rightKeyPressed () {
-        return this._rightKeyPressed;
-    },
-};
+        isRightKeyPressed: function () {
+            return _rightKeyPressed;
+        }
+    };
+})();
