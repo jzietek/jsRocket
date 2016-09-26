@@ -1,6 +1,18 @@
 "use strict"
 
-var object2d = {
+var globalConfig = {
+    space : {
+        starsCount: 512,
+        isLimited:false
+    },
+    physics : {
+        positionShiftMultiplier: 1.0,
+        velocityFactor: 0.02
+    }
+};
+
+
+var object2dMethods = {
     getCx: function () {
         return this.x + (this.width / 2);
     },
@@ -42,7 +54,7 @@ function fillWithGeneratedStars(state, count) {
     state.backgroundStars = stars;
 };
 
-function loadGameState() { //TODO Use some default values for unavailable parsed data.
+function loadGameState() {
     var stateJson = getLvl1();
     var stateParsed = JSON.parse(stateJson);
 
@@ -50,19 +62,19 @@ function loadGameState() { //TODO Use some default values for unavailable parsed
     stateParsed.height = window.innerHeight;
 
     if (stateParsed.backgroundStars === undefined || stateParsed.backgroundStars.length === 0) {
-        fillWithGeneratedStars(stateParsed, 512); //TODO put 512 int osome defaults config.
+        fillWithGeneratedStars(stateParsed, globalConfig.space.starsCount);
     }
 
     for (var i = 0; i < stateParsed.spaceShips.length; i++) {
         var s = stateParsed.spaceShips[i]; 
         s.action = spaceShipMethods.toggleFlame;
-        s.getCx = object2d.getCx;
-        s.getCy = object2d.getCy;
+        s.getCx = object2dMethods.getCx;
+        s.getCy = object2dMethods.getCy;
     }    
     for (var i = 0; i < stateParsed.astroObjects.length; i++) {
         var s = stateParsed.astroObjects[i]; 
-        s.getCx = object2d.getCx;
-        s.getCy = object2d.getCy;
+        s.getCx = object2dMethods.getCx;
+        s.getCy = object2dMethods.getCy;
     }
     return stateParsed;
 };

@@ -12,7 +12,10 @@ function getLvl1() {
              "scale" : 1.0,
              "vx": 0,
              "vy": 3,
-             "thrust" : 0
+             "thrust": 0,
+             "maxThrust": 2,
+             "rotationSpeed": 3,
+             "initRotation" :225
         }],
     "astroObjects": [
         {

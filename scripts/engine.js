@@ -1,15 +1,13 @@
 "use strict"
 
-function calculatePositions(gameState, objectsArray) {
-    var pixelShiftMultiplier = 1.0;
+function calculatePositions(gameState, objectsArray) {    
     for (var i = 0; i < objectsArray.length; i++) {
         var s = objectsArray[i];
-        s.top = s.top + s.vy * pixelShiftMultiplier;
-        s.left = s.left + s.vx * pixelShiftMultiplier;
+        s.top = s.top + s.vy * globalConfig.physics.positionShiftMultiplier;
+        s.left = s.left + s.vx * globalConfig.physics.positionShiftMultiplier;
 
         //Edge check
-        //TODO make that configurable
-        if (1) {
+        if (globalConfig.space.isLimited) {
             if (s.top < -1 * s.height) {
                 s.top = gameState.height;
             }
@@ -29,25 +27,25 @@ function calculatePositions(gameState, objectsArray) {
 
 function setThrustAndAngle(vessel) {
     if (inputManager.isUpKeyPressed()) {
-        vessel.thrust = 2;
+        vessel.thrust = vessel.maxThrust;
     }
     if (inputManager.isDownKeyPressed()) {
-        vessel.thrust = -1;
+        vessel.thrust = vessel.maxThrust * -0.5;
     }
     if (!inputManager.isDownKeyPressed() && !inputManager.isUpKeyPressed()) {
         vessel.thrust = 0;
     }
     if (inputManager.isLeftKeyPressed()) {
-        vessel.rotation = vessel.rotation - 2; //TODO adjust that when changed to radians 
+        vessel.rotation = vessel.rotation - vessel.rotationSpeed; 
     }
     if (inputManager.isRightKeyPressed()) {
-        vessel.rotation = vessel.rotation + 2;
+        vessel.rotation = vessel.rotation + vessel.rotationSpeed;
     }
 };
 
-function calculateRocketVelocities(rState) {
-    rState.vx = rState.vx + (0.02 * rState.thrust * Math.cos((rState.rotation + 225) * (Math.PI / 180))); //TODO configure the steering angle offset
-    rState.vy = rState.vy + (0.02 * rState.thrust * Math.sin((rState.rotation + 225) * (Math.PI / 180))); //TODO find a way to operate in radians
+function calculateRocketVelocities(vessel) {
+    vessel.vx = vessel.vx + (globalConfig.physics.velocityFactor * vessel.thrust * Math.cos((vessel.rotation + vessel.initRotation) * (Math.PI / 180)));
+    vessel.vy = vessel.vy + (globalConfig.physics.velocityFactor * vessel.thrust * Math.sin((vessel.rotation + vessel.initRotation) * (Math.PI / 180))); //TODO find a way to operate in radians
 };
 
 function processObjectsActions(objectsArray) {
