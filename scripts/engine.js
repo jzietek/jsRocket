@@ -22,6 +22,9 @@ function calculatePositions(gameState, objectsArray) {
                 s.left = -1 * s.width;
             }
         }
+
+        //Set rotation
+        s.rotation = s.rotation + s.vr;
     }
 }
 
@@ -36,11 +39,13 @@ function setThrustAndAngle(vessel) {
         vessel.thrust = 0;
     }
     if (inputManager.isLeftKeyPressed()) {
-        vessel.rotation = vessel.rotation - vessel.rotationSpeed; 
+        vessel.vr = vessel.vr - vessel.vrDelta;
+        vessel.vr = Math.max(vessel.vr, -1 * vessel.vrMax); 
     }
     if (inputManager.isRightKeyPressed()) {
-        vessel.rotation = vessel.rotation + vessel.rotationSpeed;
-    }
+        vessel.vr = vessel.vr + vessel.vrDelta;
+        vessel.vr = Math.min(vessel.vr, vessel.vrMax);
+    }    
 };
 
 function calculateRocketVelocities(vessel) {

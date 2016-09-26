@@ -48,7 +48,8 @@ function fillWithGeneratedStars(state, count) {
             scale: Math.random() * 0.5,
             images: { "default": "img/star.png" },
             imageSelector: "default",
-            cssClass: "star"
+            cssClass: "star",
+            vr : 0
         });
     }
     state.backgroundStars = stars;

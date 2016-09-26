@@ -14,7 +14,9 @@ function getLvl1() {
              "vy": 3,
              "thrust": 0,
              "maxThrust": 2,
-             "rotationSpeed": 3,
+             "vr" : 0.0,
+             "vrMax": 2,
+             "vrDelta" : 0.02,
              "initRotation" :225
         }],
     "astroObjects": [
@@ -28,6 +30,7 @@ function getLvl1() {
             "rotation" : 0,
             "vx" : 0,
             "vy" : 0,
+            "vr" : 0.1,
             "scale" : 1.0
         },
         {
@@ -40,6 +43,7 @@ function getLvl1() {
             "rotation" : 0,
             "vx" : 0.2,
             "vy" : 0.2,
+            "vr" : 0.1,
             "scale" : 1.0
         },
         {
@@ -52,6 +56,7 @@ function getLvl1() {
             "rotation" : 120,
             "vx" : -0.1,
             "vy" : 0.1,
+            "vr" : -0.1,
             "scale" : 0.5
         }],
     "backgroundStars": []
