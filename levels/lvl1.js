@@ -1,6 +1,8 @@
 function getLvl1() {
-    return `{
-    "spaceShips": [
+    return {
+        width: window.innerWidth,
+        height: window.innerHeight,
+    spaceShips: [
         {
              "id": "rocket1",
              "cssClass" : "astroObject",
@@ -19,7 +21,7 @@ function getLvl1() {
              "vrDelta" : 0.02,
              "initRotation" :225
         }],
-    "astroObjects": [
+    astroObjects: [
         {
             "id" : "earth",
             "cssClass" : "astroObject",
@@ -31,7 +33,8 @@ function getLvl1() {
             "vx" : 0,
             "vy" : 0,
             "vr" : 0.1,
-            "scale" : 1.0
+            "scale" : 1.0,
+            "gForce" : 1.0
         },
         {
             "id" : "moon1",
@@ -59,6 +62,6 @@ function getLvl1() {
             "vr" : -0.1,
             "scale" : 0.5
         }],
-    "backgroundStars": []
-}`;
+    backgroundStars: []
+};
 }

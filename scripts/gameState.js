@@ -56,11 +56,7 @@ function fillWithGeneratedStars(state, count) {
 };
 
 function loadGameState() {
-    var stateJson = getLvl1();
-    var stateParsed = JSON.parse(stateJson);
-
-    stateParsed.width = window.innerWidth;
-    stateParsed.height = window.innerHeight;
+    var stateParsed = getLvl1();
 
     if (stateParsed.backgroundStars === undefined || stateParsed.backgroundStars.length === 0) {
         fillWithGeneratedStars(stateParsed, globalConfig.space.starsCount);

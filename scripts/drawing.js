@@ -1,11 +1,14 @@
 "use strict"
 
-var drawingHelper = {   
-    drawSpace: function (spaceState) {
-        $("#space").css("height", spaceState.height).css("width", spaceState.width);
-    },
+var initDrawingHelper = function() {   
+    var _spaceSet = false;
+    var _2dObjectsAdded = false;
 
-    add2dObjects: function (objectsArray) {
+    var _drawSpace = function (spaceState) {
+        $("#space").css("height", spaceState.height).css("width", spaceState.width);
+    };
+
+    var _add2dObjects = function (objectsArray) {
         for (var i = 0; i < objectsArray.length; i++) {
             var s = objectsArray[i];
             var newImgTag = "<img src='" + s.images[s.imageSelector] + "' class='" + s.cssClass + "' id='" + s.id + "' style='top: " + (s.top || 0) + "px; left:" + (s.left || 0) 
@@ -15,9 +18,9 @@ var drawingHelper = {
             s.width = loadedObject.width;
             s.height = loadedObject.height;
         }
-    },
+    };
 
-    animateObjects: function (objectsArray) {
+    var _animateObjects = function (objectsArray) {
         for (var i = 0; i < objectsArray.length; i++) {
             var obj = objectsArray[i];
             var img = document.getElementById(obj.id);
@@ -30,5 +33,26 @@ var drawingHelper = {
             img.style.left = obj.left + "px";
             img.style.transform = "rotate(" + obj.rotation + "deg)";
         }
-    }
+    };
+
+    var result = {};
+    result.redraw = function(gameState) {
+            //Initialize game area
+        if (!_spaceSet) {
+            _drawSpace(gameState);
+            _spaceSet = true;
+        } 
+
+        if (!_2dObjectsAdded) {
+            _add2dObjects(gameState.backgroundStars);
+            _add2dObjects(gameState.astroObjects);
+            _add2dObjects(gameState.spaceShips);
+            _2dObjectsAdded = true;
+        }
+        
+        _animateObjects(gameState.spaceShips);
+        _animateObjects(gameState.astroObjects);
+    };
+
+    return result;
 };
