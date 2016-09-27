@@ -11,8 +11,8 @@ var initDrawingHelper = function() {
     var _add2dObjects = function (objectsArray) {
         for (var i = 0; i < objectsArray.length; i++) {
             var s = objectsArray[i];
-            var newImgTag = "<img src='" + s.images[s.imageSelector] + "' class='" + s.cssClass + "' id='" + s.id + "' style='top: " + (s.top || 0) + "px; left:" + (s.left || 0) 
-                            + "px; transform: rotate(" + (s.rotation || 0) + "deg) scale(" + (s.scale || 1.0) + "," + (s.scale || 1.0) + ")'></img>"
+            var newImgTag = "<img src='" + s.images[s.imageSelector] + "' class='" + s.cssClass + "' id='" + s.id + "' width=" + s.width + " height=" + s.height +  " style='top: " + (s.top || 0) + "px; left:" + (s.left || 0) 
+                            + "px; transform: rotate(" + (s.rotation || 0) + "deg)'></img>"
             $("#space").append(newImgTag);   
             var loadedObject = document.getElementById(s.id);
             s.width = loadedObject.width;

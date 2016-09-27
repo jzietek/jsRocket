@@ -1,14 +1,26 @@
 "use strict"
 
 var initEngine = function () {
+
+    var _engineConfig = {
+        space: {
+            starsCount: 512,
+            isLimited: false
+        },
+        physics: {
+            positionShiftMultiplier: 1.0,
+            velocityFactor: 0.02,
+        }
+    };
+
     var _calculatePositions = function (gameState, objectsArray) {
         for (var i = 0; i < objectsArray.length; i++) {
             var s = objectsArray[i];
-            s.top = s.top + s.vy * globalConfig.physics.positionShiftMultiplier;
-            s.left = s.left + s.vx * globalConfig.physics.positionShiftMultiplier;
+            s.top = s.top + s.vy * _engineConfig.physics.positionShiftMultiplier;
+            s.left = s.left + s.vx * _engineConfig.physics.positionShiftMultiplier;
 
             //Edge check
-            if (globalConfig.space.isLimited) {
+            if (_engineConfig.space.isLimited) {
                 if (s.top < -1 * s.height) {
                     s.top = gameState.height;
                 }
@@ -50,8 +62,8 @@ var initEngine = function () {
     };
 
     var _calculateRocketVelocities = function (vessel) {
-        vessel.vx = vessel.vx + (globalConfig.physics.velocityFactor * vessel.thrust * Math.cos((vessel.rotation + vessel.initRotation) * (Math.PI / 180)));
-        vessel.vy = vessel.vy + (globalConfig.physics.velocityFactor * vessel.thrust * Math.sin((vessel.rotation + vessel.initRotation) * (Math.PI / 180))); //TODO find a way to operate in radians
+        vessel.vx = vessel.vx + (_engineConfig.physics.velocityFactor * vessel.thrust * Math.cos((vessel.rotation + vessel.initRotation) * (Math.PI / 180)));
+        vessel.vy = vessel.vy + (_engineConfig.physics.velocityFactor * vessel.thrust * Math.sin((vessel.rotation + vessel.initRotation) * (Math.PI / 180)));
     };
 
     var _processObjectsActions = function (objectsArray) {
@@ -66,8 +78,10 @@ var initEngine = function () {
     var _calculateGravity = function (gameState) {
         for (var i = 0; i < gameState.astroObjects.length; i++) {
             var gravitySource = gameState.astroObjects[i];
-            //applyGravity(gravitySource, gameState.spaceShips);
-            //applyGravity(gravitySource, gameState.astroObjects);
+            if (gravitySource.gForce > 0) {
+                _applyGravity(gravitySource, gameState.spaceShips);
+                _applyGravity(gravitySource, gameState.astroObjects);
+            }
         }
     };
 
@@ -77,37 +91,32 @@ var initEngine = function () {
             if (gravitySource === obj) {
                 continue;
             }
+            
+            var rx = gravitySource.getCx() - obj.getCx();
+            var ry = gravitySource.getCy() - obj.getCy();            
 
-            var rtpx = gravitySource.getCx() - obj.getCx();
-            var rtpy = gravitySource.getCy() - obj.getCy();
-
-            var distance = Math.sqrt((rtpx * rtpx) + (rtpy * rtpy));
-            debugger;
+            var distance = Math.sqrt((rx * rx) + (ry * ry));
             if (distance !== 0.0) {
-                var invDistance2 = Math.min(5 / (distance), 2);
-                console.log(invDistance2);
+                var gx = gravitySource.gForce * (rx  / distance) / distance;
+                var gy = gravitySource.gForce * (ry  / distance) / distance;
+                
+                console.log(gx + " , " + gy);
 
-                var tempX = obj.vx + ((rtpx / distance) * invDistance2);
-                var tempY = obj.vy + ((rtpy / distance) * invDistance2);
-                //tempX = Math.max(-1 * maxV, Math.min(maxV, tempX));
-                //tempY = Math.max(-1 * maxV, Math.min(maxV, tempY));
-
-                obj.vx = tempX;
-                obj.vy = tempY;
+                obj.vx = obj.vx + gx;
+                obj.vy = obj.vy + gy;
             }
         }
     };
 
     var result = {};
     result.gameLoop = function () {
+        drawingHelper.redraw(gameState);
         _setThrustAndAngle(gameState.spaceShips[0]);
         _calculateRocketVelocities(gameState.spaceShips[0]);
         _calculateGravity(gameState);
         _calculatePositions(gameState, gameState.astroObjects);
         _calculatePositions(gameState, gameState.spaceShips);
-        _processObjectsActions(gameState.spaceShips);
-
-        drawingHelper.redraw(gameState);
+        _processObjectsActions(gameState.spaceShips);        
     };
 
     return result;
