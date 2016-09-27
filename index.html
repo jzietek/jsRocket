@@ -4,17 +4,31 @@
 <head>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    
+
     <script src="levels/lvl1.js"></script>
-    
-    <script src="scripts/gameState.js"></script>
+
+    <script src="scripts/types.js"></script>
     <script src="scripts/controls.js"></script>
     <script src="scripts/drawing.js"></script>
     <script src="scripts/engine.js"></script>
+
+    <script>
+        var gameState = getLvl1();
+        var inputManager = initInputManager();
+        var drawingHelper = initDrawingHelper();
+        var engine = initEngine();
+
+        $(document).ready(function () {
+        document.addEventListener('keydown', function (event) { inputManager.keyDownFunc(event); });
+        document.addEventListener('keyup', function (event) { inputManager.keyUpFunc(event); });
+
+        setInterval(engine.gameLoop, 25);    
+        });
+    </script>
 </head>
-    
+
 <body>
-    <div id="space" ></div>    
+    <div id="space"></div>    
 </body>
 
 </html>
