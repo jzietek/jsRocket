@@ -100,8 +100,6 @@ var initEngine = function () {
                 var gx = gravitySource.gForce * (rx  / distance) / distance;
                 var gy = gravitySource.gForce * (ry  / distance) / distance;
                 
-                console.log(gx + " , " + gy);
-
                 obj.vx = obj.vx + gx;
                 obj.vy = obj.vy + gy;
             }
