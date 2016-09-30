@@ -46,7 +46,7 @@ jsRocket.levels.getLvl1 = function() {
                 initRotation: 225,
                 width : 180,
                 height : 180,
-                fuel: 100 
+                fuel: 10000 
             }];
 
 

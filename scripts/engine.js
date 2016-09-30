@@ -41,35 +41,7 @@ jsRocket.engine.initEngine = function () {
             //Set rotation
             s.rotation = s.rotation + s.vr;
         }
-    };
-
-    var _setThrustAndAngle = function (vessel) {
-        //TODO this should not be here. Move it to type specific file
-        if (inputManager.isUpKeyPressed()) {
-            vessel.thrust = vessel.maxThrust;
-        }
-        if (inputManager.isDownKeyPressed()) {
-            vessel.thrust = vessel.maxThrust * -0.5;
-        }
-        if (!inputManager.isDownKeyPressed() && !inputManager.isUpKeyPressed()) {
-            vessel.thrust = 0;
-        }
-        if (inputManager.isLeftKeyPressed()) {
-            vessel.vr = vessel.vr - vessel.vrDelta;
-            vessel.vr = Math.max(vessel.vr, -1 * vessel.vrMax);
-            vessel.leftThrust = true;
-        } else {
-            vessel.leftThrust = false;
-        }
-
-        if (inputManager.isRightKeyPressed()) {
-            vessel.vr = vessel.vr + vessel.vrDelta;
-            vessel.vr = Math.min(vessel.vr, vessel.vrMax);
-            vessel.rightThrust = true;
-        } else {
-            vessel.rightThrust = false;
-        }
-    };
+    };    
 
     var _calculateRocketVelocities = function (vessel) {
         vessel.vx = vessel.vx + (_engineConfig.physics.velocityFactor * vessel.thrust * Math.cos((vessel.rotation + vessel.initRotation) * (Math.PI / 180)));
