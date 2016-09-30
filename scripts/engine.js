@@ -1,6 +1,8 @@
 "use strict"
 
-var initEngine = function () {
+namespace('jsRocket.engine');
+
+jsRocket.engine.initEngine = function () {
 
     var _engineConfig = {
         space: {
@@ -42,6 +44,7 @@ var initEngine = function () {
     };
 
     var _setThrustAndAngle = function (vessel) {
+        //TODO this should not be here. Move it to type specific file
         if (inputManager.isUpKeyPressed()) {
             vessel.thrust = vessel.maxThrust;
         }
@@ -54,10 +57,17 @@ var initEngine = function () {
         if (inputManager.isLeftKeyPressed()) {
             vessel.vr = vessel.vr - vessel.vrDelta;
             vessel.vr = Math.max(vessel.vr, -1 * vessel.vrMax);
+            vessel.leftThrust = true;
+        } else {
+            vessel.leftThrust = false;
         }
+
         if (inputManager.isRightKeyPressed()) {
             vessel.vr = vessel.vr + vessel.vrDelta;
             vessel.vr = Math.min(vessel.vr, vessel.vrMax);
+            vessel.rightThrust = true;
+        } else {
+            vessel.rightThrust = false;
         }
     };
 
@@ -109,7 +119,9 @@ var initEngine = function () {
     var result = {};
     result.gameLoop = function () {
         drawingHelper.redraw(gameState);
-        _setThrustAndAngle(gameState.spaceShips[0]);
+        
+        gameState.spaceShips[0].handleInput(inputManager);
+
         _calculateRocketVelocities(gameState.spaceShips[0]);
         _calculateGravity(gameState);
         _calculatePositions(gameState, gameState.astroObjects);

@@ -1,4 +1,6 @@
-function getLvl1() {
+namespace('jsRocket.levels');
+
+jsRocket.levels.getLvl1 = function() {
     var _width = window.innerWidth;
     var _height = window.innerHeight;
 
@@ -6,8 +8,31 @@ function getLvl1() {
             {
                 id: "rocket1",
                 cssClass: "spaceShip",
-                images: { "default": "img/rocket.png", "withFlame": "img/rocketWithFlame.png" },
-                imageSelector: "default",
+                images: [ {
+                    name:"default",
+                    src: "img/rocket.png",
+                    visible: true
+                }, 
+                {
+                    name: "rearFlame",
+                    src: "img/rocketRearFlame.png",
+                    visible: false
+                }, 
+                {
+                    name: "leftFlame",
+                    src: "img/rocketLeftFlame.png",
+                    visible: false
+                },
+                {
+                    name: "rightFlame",
+                    src: "img/rocketRightFlame.png",
+                    visible: false
+                },
+                {
+                    name: "frontFlame",
+                    src: "img/rocketFrontFlame.png",
+                    visible: false
+                }],
                 top: 30,
                 left: 30,
                 rotation: 180,
@@ -20,7 +45,8 @@ function getLvl1() {
                 vrDelta: 0.02,
                 initRotation: 225,
                 width : 180,
-                height : 180 
+                height : 180,
+                fuel: 100 
             }];
 
 
@@ -28,7 +54,11 @@ function getLvl1() {
             {
                 id: "earth",
                 cssClass: "astroObject",
-                images: { "default": "img/planet.png" },
+                images: [{ 
+                    name: "default", 
+                    src: "img/planet.png",
+                    visible: true
+                }],
                 imageSelector: "default",
                 top: 400,
                 left: 500,
@@ -43,8 +73,10 @@ function getLvl1() {
             {
                 id: "moon1",
                 cssClass: "astroObject",
-                images: { "default": "img/moon.png" },
-                imageSelector: "default",
+                images: [{ 
+                    name: "default", 
+                    src: "img/moon.png",
+                    visible: true }],
                 top: 220,
                 left: 480,
                 rotation: 0,
@@ -72,8 +104,10 @@ function getLvl1() {
                         rotation: Math.random() * 90,
                         width : Math.random() * 20,
                         height : this.width,
-                        images: { "default": "img/star.png" },
-                        imageSelector: "default",
+                        images: [{ 
+                            name: "default", 
+                            src: "img/star.png",
+                            visible: true }],
                         cssClass: "star",
                         vr : 0
                     });
@@ -84,8 +118,8 @@ function getLvl1() {
     return {
         width: _width,
         height: _height,
-        spaceShips: _spaceShips.map(function (x) {return _copyProps(x, new SpaceShip()); }),
-        astroObjects: _astroObjects.map(function (x) {return _copyProps(x, new SpaceObject()); }),
+        spaceShips: _spaceShips.map(function (x) {return _copyProps(x, new jsRocket.types.SpaceShip()); }),
+        astroObjects: _astroObjects.map(function (x) {return _copyProps(x, new jsRocket.types.SpaceObject()); }),
         backgroundStars: _generateStars(512)
     };
 }

@@ -5,18 +5,20 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-    <script src="levels/lvl1.js"></script>
-
+    <script src="scripts/globalFunctions.js"></script>
     <script src="scripts/types.js"></script>
     <script src="scripts/controls.js"></script>
     <script src="scripts/drawing.js"></script>
     <script src="scripts/engine.js"></script>
 
+    <script src="levels/lvl1.js"></script>
+
     <script>
-        var gameState = getLvl1();
-        var inputManager = initInputManager();
-        var drawingHelper = initDrawingHelper();
-        var engine = initEngine();
+
+        var gameState = jsRocket.levels.getLvl1();
+        var inputManager = jsRocket.inputManager.initInputManager();
+        var drawingHelper = jsRocket.drawing.initDrawingHelper();
+        var engine = jsRocket.engine.initEngine();
 
         $(document).ready(function () {
         document.addEventListener('keydown', function (event) { inputManager.keyDownFunc(event); });
