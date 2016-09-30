@@ -1,6 +1,8 @@
 "use strict"
 
-var initDrawingHelper = function() {   
+namespace('jsRocket.drawing');
+
+jsRocket.drawing.initDrawingHelper = function() {   
     var _spaceSet = false;
     var _2dObjectsAdded = false;
 

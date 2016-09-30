@@ -1,4 +1,6 @@
-function getLvl1() {
+namespace('jsRocket.levels');
+
+jsRocket.levels.getLvl1 = function() {
     var _width = window.innerWidth;
     var _height = window.innerHeight;
 

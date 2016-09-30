@@ -1,6 +1,8 @@
 "use strict"
 
-var initInputManager = function () {
+namespace('jsRocket.inputManager');
+
+jsRocket.inputManager.initInputManager = function () {
     var _upKeyPressed = false;
     var _downKeyPressed = false;
     var _leftKeyPressed = false;

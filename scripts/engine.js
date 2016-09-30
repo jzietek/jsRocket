@@ -1,6 +1,8 @@
 "use strict"
 
-var initEngine = function () {
+namespace('jsRocket.engine');
+
+jsRocket.engine.initEngine = function () {
 
     var _engineConfig = {
         space: {
