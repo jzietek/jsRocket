@@ -10,29 +10,28 @@ jsRocket.drawing.initDrawingHelper = function() {
         $("#space").css("height", spaceState.height).css("width", spaceState.width);
     };
 
-    var _add2dObjects = function (objectsArray) {
-        for (var i = 0; i < objectsArray.length; i++) {
-            var s = objectsArray[i];
-
-            for (var j = 0; j < s.images.length; j++) {
-                var img = s.images[j];
-                var newImgTag = "<img id='" + s.id + "_" + img.name + "' class='" + s.cssClass + "' src='" + img.src 
+    var _create2dObject = function (s, img) {
+        return "<img id='" + s.id + "_" + img.name + "' class='" + s.cssClass + "' src='" + img.src 
                 + "' width=" + s.width + " height=" + s.height 
                 +  " style='top: " + (s.top || 0) + "px; left:" + (s.left || 0) + "px; transform: rotate(" + (s.rotation || 0) + "deg); visibility: "+ (img.visible ? "visible" :  "hidden") + "'" 
                 + "></img>";
+    };
 
-                $("#space").append(newImgTag);
-            }
-        }
+    var _createHudObject = function (spaceShip, i) {
+        return  "<p id='" + spaceShip.id +  "_fuel' class='hud' style='top: " + i * 20 + "px; left: 10px'>" +  spaceShip.id + " fuel: " +  spaceShip.fuel + "</p>";
+    };
+
+    var _add2dObjects = function (objectsArray) {
+        objectsArray.forEach(function(obj) { 
+            obj.images.forEach(function(img) { 
+                $("#space").append(_create2dObject(obj, img)); 
+            }, this);
+        }, this);
     };
 
     var _addHudObjects = function (objectsArray) {
         for (var i = 0; i < objectsArray.length; i++) {
-            var spaceShip = objectsArray[i];
-            var hudDiv = "<p id='" + spaceShip.id +  "_fuel' class='hud' style='top: " + i * 20 + "px; left: 10px'>"
-                        +  spaceShip.id + " fuel: " +  spaceShip.fuel + "</p>";
-
-            $("#space").append(hudDiv);
+            $("#space").append(_createHudObject(objectsArray[i], i));
         }
     };
 
