@@ -54,10 +54,17 @@ var initEngine = function () {
         if (inputManager.isLeftKeyPressed()) {
             vessel.vr = vessel.vr - vessel.vrDelta;
             vessel.vr = Math.max(vessel.vr, -1 * vessel.vrMax);
+            vessel.leftThrust = true;
+        } else {
+            vessel.leftThrust = false;
         }
+
         if (inputManager.isRightKeyPressed()) {
             vessel.vr = vessel.vr + vessel.vrDelta;
             vessel.vr = Math.min(vessel.vr, vessel.vrMax);
+            vessel.rightThrust = true;
+        } else {
+            vessel.rightThrust = false;
         }
     };
 

@@ -25,18 +25,32 @@ var SpaceObject = function () {
 };
 
 var SpaceShip = function () {
+    var imageIndex = { default: 0, rearFlame : 1, leftFlame: 2, rightFlame: 3, frontFlame: 4 };
     this.thrust = 0;
+    this.leftThrust = false;
+    this.rightThrust = false;
     this.maxThrust = 2;
     this.cssClass = "spaceShip";
     this.action = function () {
         if (this.thrust > 0) {
-            if (this.imageSelector === "withFlame") {
-                this.imageSelector = "default";
-            } else {
-                this.imageSelector = "withFlame";
-            }
+            this.images[imageIndex.rearFlame].visible = !this.images[imageIndex.rearFlame].visible;
+        } else if (this.thrust < 0) {
+            this.images[imageIndex.frontFlame].visible = !this.images[imageIndex.frontFlame].visible;
         } else {
-            this.imageSelector = "default";
+            this.images[imageIndex.rearFlame].visible = false;
+            this.images[imageIndex.frontFlame].visible = false;
+        }
+
+        if (this.leftThrust) {
+            this.images[imageIndex.leftFlame].visible = !this.images[imageIndex.leftFlame].visible;
+        } else {
+            this.images[imageIndex.leftFlame].visible = false;
+        }
+
+        if (this.rightThrust) {
+            this.images[imageIndex.rightFlame].visible = !this.images[imageIndex.rightFlame].visible;
+        } else {
+            this.images[imageIndex.rightFlame].visible = false;
         }
     };
     return this;
