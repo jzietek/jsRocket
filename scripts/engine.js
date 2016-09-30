@@ -44,6 +44,7 @@ jsRocket.engine.initEngine = function () {
     };
 
     var _setThrustAndAngle = function (vessel) {
+        //TODO this should not be here. Move it to type specific file
         if (inputManager.isUpKeyPressed()) {
             vessel.thrust = vessel.maxThrust;
         }
@@ -118,7 +119,9 @@ jsRocket.engine.initEngine = function () {
     var result = {};
     result.gameLoop = function () {
         drawingHelper.redraw(gameState);
-        _setThrustAndAngle(gameState.spaceShips[0]);
+        
+        gameState.spaceShips[0].handleInput(inputManager);
+
         _calculateRocketVelocities(gameState.spaceShips[0]);
         _calculateGravity(gameState);
         _calculatePositions(gameState, gameState.astroObjects);

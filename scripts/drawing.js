@@ -26,6 +26,16 @@ jsRocket.drawing.initDrawingHelper = function() {
         }
     };
 
+    var _addHudObjects = function (objectsArray) {
+        for (var i = 0; i < objectsArray.length; i++) {
+            var spaceShip = objectsArray[i];
+            var hudDiv = "<p id='" + spaceShip.id +  "_fuel' class='hud' style='top: " + i * 20 + "px; left: 10px'>"
+                        +  spaceShip.id + " fuel: " +  spaceShip.fuel + "</p>";
+
+            $("#space").append(hudDiv);
+        }
+    };
+
     var _animateObjects = function (objectsArray) {
         for (var i = 0; i < objectsArray.length; i++) {
             var obj = objectsArray[i];
@@ -39,6 +49,14 @@ jsRocket.drawing.initDrawingHelper = function() {
                 img.style.visibility = (imgObj.visible ? "visible" :  "hidden");
                 img.style.transform = "rotate(" + obj.rotation + "deg)";
             }
+        }
+    };    
+
+    var _animateHudObjects = function (objectsArray) {
+        for (var i = 0; i < objectsArray.length; i++) {
+            var spaceShip = objectsArray[i];
+            var p = document.getElementById(spaceShip.id + "_fuel");
+            p.innerHTML = spaceShip.id + " fuel: " +  spaceShip.fuel;
         }
     };
 
@@ -54,11 +72,13 @@ jsRocket.drawing.initDrawingHelper = function() {
             _add2dObjects(gameState.backgroundStars);
             _add2dObjects(gameState.astroObjects);
             _add2dObjects(gameState.spaceShips);
+            _addHudObjects(gameState.spaceShips);
             _2dObjectsAdded = true;
         }
         
         _animateObjects(gameState.spaceShips);
         _animateObjects(gameState.astroObjects);
+        _animateHudObjects(gameState.spaceShips);
     };
 
     return result;

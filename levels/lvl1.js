@@ -45,7 +45,8 @@ jsRocket.levels.getLvl1 = function() {
                 vrDelta: 0.02,
                 initRotation: 225,
                 width : 180,
-                height : 180 
+                height : 180,
+                fuel: 100 
             }];
 
 
@@ -117,8 +118,8 @@ jsRocket.levels.getLvl1 = function() {
     return {
         width: _width,
         height: _height,
-        spaceShips: _spaceShips.map(function (x) {return _copyProps(x, new SpaceShip()); }),
-        astroObjects: _astroObjects.map(function (x) {return _copyProps(x, new SpaceObject()); }),
+        spaceShips: _spaceShips.map(function (x) {return _copyProps(x, new jsRocket.types.SpaceShip()); }),
+        astroObjects: _astroObjects.map(function (x) {return _copyProps(x, new jsRocket.types.SpaceObject()); }),
         backgroundStars: _generateStars(512)
     };
 }
